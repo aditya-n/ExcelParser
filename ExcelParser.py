@@ -3,19 +3,22 @@ import xlrd, xlwt
 facultyDetailsDictionary = {}
 i = 0
 
-def sublist(oldList, start, end):
+def getRangeElement(oldList, start, end):
     courseAndStartSection = oldList[start]
     if end == -1:
-        return [courseAndStartSection]
-    #sectionEnd =
-    pass
+        return courseAndStartSection
+    else:
+        end_section = int(oldList[end].split('/')[1])%1000;
+        range_element = courseAndStartSection + '-' + str(end_section);
+        return range_element
 
 def formatCourseAndSectionList(courseAndSectionList):
-    new_list = courseAndSectionList[:]
+    new_list = []
     start = end = -1 #Range variables for same course continuous sections
     for idx, val in enumerate(courseAndSectionList):
         if idx == len(courseAndSectionList) - 1: #Ignore last element as this doesn't have a next element to pair with.
-            continue
+            new_list.append(getRangeElement(courseAndSectionList, start, end))
+            return new_list
         section = int(val.split('/')[1])
         nextSection = int(courseAndSectionList[idx+1].split('/')[1])
 
@@ -24,11 +27,9 @@ def formatCourseAndSectionList(courseAndSectionList):
                 start = idx
             end = idx + 1
         else:
-            new_list.append(sublist(courseAndSectionList, start, end)) #Append range for same course continuous sections
+            new_list.append(getRangeElement(courseAndSectionList, start, end)) #Append range for same course continuous sections
             end = -1
             start = idx
-
-    return new_list
 
 def outputData():
     workbook = xlwt.Workbook()
@@ -64,7 +65,7 @@ for sheet in book.sheets():
 
 outputData()
 
-
-print('Bianca Harper\'s List', facultyDetailsDictionary['Bianca Harper'])
-print(formatCourseAndSectionList(facultyDetailsDictionary['Bianca Harper']))
+prof2Check = 'Beverly Younger'
+print('Prof\'s List', facultyDetailsDictionary[prof2Check])
+print(formatCourseAndSectionList(facultyDetailsDictionary[prof2Check]))
 
