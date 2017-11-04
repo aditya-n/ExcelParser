@@ -36,9 +36,11 @@ def outputData():
     sheet = workbook.add_sheet('test')
     row = 0
     for key in facultyDetailsDictionary:
-        sheet.write(row, 0, key)
-        sheet.write(row, 1, ', '.join(facultyDetailsDictionary[key]))
-        row = row + 1
+        courseAndSectionListForEachProf = formatCourseAndSectionList(facultyDetailsDictionary[key])
+        for entry in courseAndSectionListForEachProf:
+            sheet.write(row, 0, key)
+            sheet.write(row, 1, entry)
+            row = row + 1
     workbook.save('output1.xls')
 
 def addNewEntryInDictionary(profName, courseAndSection):
@@ -65,7 +67,7 @@ for sheet in book.sheets():
 
 outputData()
 
-prof2Check = 'Beverly Younger'
+prof2Check = 'Alla Branzburg'
 print('Prof\'s List', facultyDetailsDictionary[prof2Check])
 print(formatCourseAndSectionList(facultyDetailsDictionary[prof2Check]))
 
